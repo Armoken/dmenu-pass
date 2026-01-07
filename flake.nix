@@ -12,9 +12,12 @@
       pkgs = import nixpkgs {
         inherit system;
       };
-      dmenu-systemd = pkgs.python3Packages.buildPythonApplication {
+      dmenu-pass = pkgs.python3Packages.buildPythonApplication {
         pname = "dmenu-pass";
-        version = "1.0";
+        version = "1.1";
+
+        pyproject = true;
+        build-system = [ pkgs.python3Packages.setuptools ];
 
         propagatedBuildInputs = with pkgs.python3Packages; [
           pygobject3
@@ -23,14 +26,14 @@
 
         src = ./.;
       };
-      python-with-packages = ((pkgs.python3Full.withPackages(ps: [
+      python-with-packages = ((pkgs.python3.withPackages(ps: [
         ps.pygobject3  # Python bindings for Glib.
         ps.dbus-python # A zero-dependency DBus library for Python with asyncio support.
 
         ps.ipython
       ])).overrideAttrs (args: { ignoreCollisions = true; doCheck = false; }));
     in {
-      defaultPackage = dmenu-systemd;
+      defaultPackage = dmenu-pass;
       devShell       = pkgs.mkShell {
         nativeBuildInputs = [
           python-with-packages

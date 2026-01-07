@@ -25,7 +25,8 @@ class NotificationType(enum.Enum):
 def get_notify_interface():
     # Check existence of interface
     try:
-        dbus.SessionBus().list_names().index("org.freedesktop.Notifications")
+        dbus.SessionBus().list_names()\
+                         .index("org.freedesktop.Notifications") # type: ignore
     except ValueError:
         logging.warning("D-Bus object for notifications not exists!")
         return
